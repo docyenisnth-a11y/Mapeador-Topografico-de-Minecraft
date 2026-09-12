@@ -145,6 +145,7 @@ namespace MinecraftMapApp
             btnJoaoMaria.FlatStyle = FlatStyle.Flat;
             btnJoaoMaria.Font = new Font("Segoe UI", 8, FontStyle.Bold);
             btnJoaoMaria.Click += BtnJoaoMaria_Click;
+            btnJoaoMaria.MouseUp += BtnJoaoMaria_MouseUp;
             panelMenu.Controls.Add(btnJoaoMaria);
 
             btnAdicionar.Text = "Marcar Ponto 3D";

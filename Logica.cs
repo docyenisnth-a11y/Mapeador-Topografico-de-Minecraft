@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace MinecraftMapApp
@@ -654,6 +655,47 @@ namespace MinecraftMapApp
 
             pontosRotaAtual.Clear();
             joaoMariaAtivo = false;
+        }
+
+        // ==========================================
+        // EXCLUIR ROTA JOÃO E MARIA (clique direito no botão)
+        // ==========================================
+
+        private void BtnJoaoMaria_MouseUp(object? sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+
+            List<RotaJoaoMaria> rotas =
+                mundoAtual.RotasJoaoMaria
+                    .Where(r => r.Superficie == eSuperficie)
+                    .ToList();
+
+            if (rotas.Count == 0)
+            {
+                MessageBox.Show(
+                    "Não há rotas João e Maria salvas nesta dimensão.");
+                return;
+            }
+
+            ContextMenuStrip menuRotas = new ContextMenuStrip();
+
+            foreach (RotaJoaoMaria rota in rotas)
+            {
+                ToolStripMenuItem item =
+                    new ToolStripMenuItem($"Excluir: {rota.Nome}");
+
+                item.Click += (s, args) =>
+                {
+                    mundoAtual.RotasJoaoMaria.Remove(rota);
+                    gerenciadorMundos.SalvarMundoAtual();
+                    this.Invalidate();
+                };
+
+                menuRotas.Items.Add(item);
+            }
+
+            menuRotas.Show(btnJoaoMaria, e.Location);
         }
 
         private void AdicionarPontoNaRota(PontoMinecraft ponto)
