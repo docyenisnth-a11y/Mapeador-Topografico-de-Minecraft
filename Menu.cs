@@ -6,10 +6,6 @@ namespace MinecraftMapApp
 {
     public partial class FormMapa : Form
     {
-        private TextBox txtNome = new TextBox();
-        private TextBox txtX = new TextBox();
-        private TextBox txtY = new TextBox();
-        private TextBox txtZ = new TextBox();
         private Button btnAdicionar = new Button();
 
         private Label lblInfoDimensao = new Label();
@@ -85,60 +81,19 @@ namespace MinecraftMapApp
             lblResultadoPesquisa.Font = new Font("Segoe UI", 8);
             panelMenu.Controls.Add(lblResultadoPesquisa);
 
-            Label lblNome = new Label
-            {
-                Text = "Nome do Local:",
-                ForeColor = Color.LightGray,
-                Location = new Point(20, 145),
-                Size = new Size(210, 15)
-            };
-            txtNome.Location = new Point(20, 166);
-            txtNome.Size = new Size(210, 23);
-            panelMenu.Controls.Add(lblNome);
-            panelMenu.Controls.Add(txtNome);
+            btnAdicionar.Text = "+ Adicionar Ponto";
+            btnAdicionar.Location = new Point(20, 145);
+            btnAdicionar.Size = new Size(210, 40);
+            btnAdicionar.BackColor = Color.FromArgb(46, 139, 87);
+            btnAdicionar.ForeColor = Color.White;
+            btnAdicionar.FlatStyle = FlatStyle.Flat;
+            btnAdicionar.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            btnAdicionar.Click += BtnAdicionar_Click;
+            panelMenu.Controls.Add(btnAdicionar);
 
-            Label lblX = new Label
-            {
-                Text = "Coordenada X (Leste/Oeste):",
-                ForeColor = Color.LightGray,
-                Location = new Point(20, 205),
-                Size = new Size(210, 15)
-            };
-            txtX.Location = new Point(20, 226);
-            txtX.Size = new Size(155, 23);
-            txtX.Text = "0";
-            panelMenu.Controls.Add(lblX);
-            panelMenu.Controls.Add(txtX);
-
-            Label lblY = new Label
-            {
-                Text = "Coordenada Y (Altitude):",
-                ForeColor = Color.LightGray,
-                Location = new Point(20, 265),
-                Size = new Size(210, 15)
-            };
-            txtY.Location = new Point(20, 286);
-            txtY.Size = new Size(155, 23);
-            txtY.Text = "64";
-            panelMenu.Controls.Add(lblY);
-            panelMenu.Controls.Add(txtY);
-
-            Label lblZ = new Label
-            {
-                Text = "Coordenada Z (Norte/Sul):",
-                ForeColor = Color.LightGray,
-                Location = new Point(20, 325),
-                Size = new Size(210, 15)
-            };
-            txtZ.Location = new Point(20, 346);
-            txtZ.Size = new Size(155, 23);
-            txtZ.Text = "0";
-            panelMenu.Controls.Add(lblZ);
-            panelMenu.Controls.Add(txtZ);
-
-            // Ferramenta de rota fica abaixo de Marcar Ponto 3D.
+            // Ferramenta de rota fica logo abaixo de Adicionar Ponto.
             btnJoaoMaria.Text = "JOÃO E MARIA";
-            btnJoaoMaria.Location = new Point(20, 438);
+            btnJoaoMaria.Location = new Point(20, 195);
             btnJoaoMaria.Size = new Size(210, 40);
             btnJoaoMaria.BackColor = Color.FromArgb(95, 70, 150);
             btnJoaoMaria.ForeColor = Color.White;
@@ -148,32 +103,13 @@ namespace MinecraftMapApp
             btnJoaoMaria.MouseUp += BtnJoaoMaria_MouseUp;
             panelMenu.Controls.Add(btnJoaoMaria);
 
-            btnAdicionar.Text = "Marcar Ponto 3D";
-            btnAdicionar.Location = new Point(20, 390);
-            btnAdicionar.Size = new Size(210, 40);
-            btnAdicionar.BackColor = Color.FromArgb(46, 139, 87);
-            btnAdicionar.ForeColor = Color.White;
-            btnAdicionar.FlatStyle = FlatStyle.Flat;
-            btnAdicionar.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-            btnAdicionar.Click += BtnAdicionar_Click;
-            panelMenu.Controls.Add(btnAdicionar);
 
             lblRota.Text = "João e Maria: desligado";
             lblRota.ForeColor = Color.DarkGray;
-            lblRota.Location = new Point(20, 488);
+            lblRota.Location = new Point(20, 245);
             lblRota.Size = new Size(210, 38);
             lblRota.Font = new Font("Segoe UI", 8, FontStyle.Bold);
             panelMenu.Controls.Add(lblRota);
-
-            Label lblDica = new Label
-            {
-                Text = "ATALHOS:\n\n* Ctrl + N: alterna Superfície/Nether.\n* Scroll: zoom.\n* Clique em 2 pontos: distância.\n* João e Maria: clique em vários pontos para criar uma trilha.",
-                ForeColor = Color.DarkGray,
-                Location = new Point(20, 545),
-                Size = new Size(210, 180),
-                Font = new Font("Segoe UI", 9, FontStyle.Italic)
-            };
-            panelMenu.Controls.Add(lblDica);
         }
     }
 }

@@ -237,75 +237,49 @@ namespace MinecraftMapApp
             object? sender,
             EventArgs e)
         {
-            try
+            using (
+                NovoPontoForm janela =
+                new NovoPontoForm())
             {
                 if (
-                    string.IsNullOrWhiteSpace(
-                        txtNome.Text)
+                    janela.ShowDialog(this)
+                    ==
+                    DialogResult.OK
                 )
                 {
-                    MessageBox.Show(
-                        "Digite um nome para o ponto."
-                    );
+                    PontoMinecraft novoPonto =
+                        new PontoMinecraft
+                        {
+                            Nome = janela.NomePonto,
+                            X = janela.XPonto,
+                            Y = janela.YPonto,
+                            Z = janela.ZPonto,
+                            Nota = janela.NotaPonto
+                        };
 
-                    return;
-                }
-
-
-                PontoMinecraft novoPonto =
-                    new PontoMinecraft
+                    if (eSuperficie)
                     {
-                        Nome =
-                            txtNome.Text.Trim(),
+                        pontosSuperficie.Add(
+                            novoPonto
+                        );
+                    }
+                    else
+                    {
+                        pontosNether.Add(
+                            novoPonto
+                        );
+                    }
 
-                        X =
-                            int.Parse(txtX.Text),
+                    // Salvar automaticamente
 
-                        Y =
-                            int.Parse(txtY.Text),
+                    gerenciadorMundos
+                        .SalvarMundoAtual();
 
-                        Z =
-                            int.Parse(txtZ.Text),
+                    pontoSelecionadoParaDistancia =
+                        null;
 
-                        Nota =
-                            string.Empty
-                    };
-
-
-                if (eSuperficie)
-                {
-                    pontosSuperficie.Add(
-                        novoPonto
-                    );
+                    this.Invalidate();
                 }
-                else
-                {
-                    pontosNether.Add(
-                        novoPonto
-                    );
-                }
-
-
-                // Salvar automaticamente
-
-                gerenciadorMundos
-                    .SalvarMundoAtual();
-
-
-                txtNome.Clear();
-
-
-                pontoSelecionadoParaDistancia =
-                    null;
-
-
-                this.Invalidate();
-            }
-            catch
-            {
-                MessageBox.Show(
-                    "Preencha as coordenadas com numeros inteiros!"
-                );
             }
         }
 
