@@ -41,7 +41,7 @@ namespace MinecraftMapApp
             };
             this.Controls.Add(panelMenu);
 
-            lblInfoDimensao.Text = "🌍 DIMENSAO: SUPERFICIE";
+            lblInfoDimensao.Text = "SUPERFÍCIE";
             lblInfoDimensao.ForeColor = Color.YellowGreen;
             lblInfoDimensao.Location = new Point(20, 15);
             lblInfoDimensao.Size = new Size(210, 20);

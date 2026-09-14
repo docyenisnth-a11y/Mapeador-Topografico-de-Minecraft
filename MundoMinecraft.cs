@@ -27,6 +27,12 @@ namespace MinecraftMapApp
 
         public DateTime DataCriacao { get; set; } = DateTime.Now;
 
+        public float CameraX { get; set; } = 650f;
+
+        public float CameraY { get; set; } = 350f;
+
+        public float CameraEscala { get; set; } = 0.8f;
+
         public List<PontoMinecraft> PontosSuperficie { get; set; } = new List<PontoMinecraft>();
 
         public List<PontoMinecraft> PontosNether { get; set; } = new List<PontoMinecraft>();

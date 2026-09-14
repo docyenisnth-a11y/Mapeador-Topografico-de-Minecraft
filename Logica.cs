@@ -146,14 +146,16 @@ namespace MinecraftMapApp
 
         public FormMapa()
         {
-            // Se não houver mundos,
-            // cria o mundo inicial.
+            // Se não houver mundos, cria um mundo vazio (sem nome
+            // padrao) so pra ter onde salvar os primeiros pontos.
+            // O usuario da o nome de verdade depois, em "+ NOVO
+            // MUNDO" ou editando as informacoes do mundo.
 
             if (gerenciadorMundos.Mundos.Count == 0)
             {
                 mundoAtual =
                     gerenciadorMundos.CriarMundo(
-                        "Kyoko",
+                        string.Empty,
                         string.Empty
                     );
             }
@@ -162,6 +164,10 @@ namespace MinecraftMapApp
                 mundoAtual =
                     gerenciadorMundos.Mundos[0];
             }
+
+            deslocamentoX = mundoAtual.CameraX;
+            deslocamentoY = mundoAtual.CameraY;
+            escala = mundoAtual.CameraEscala;
 
 
             this.Size =
@@ -236,6 +242,9 @@ namespace MinecraftMapApp
             {
                 mundoAtual = janela.MundoSelecionado;
                 gerenciadorMundos.SelecionarMundo(mundoAtual);
+                deslocamentoX = mundoAtual.CameraX;
+                deslocamentoY = mundoAtual.CameraY;
+                escala = mundoAtual.CameraEscala;
                 eSuperficie = true;
                 eFim = false;
                 modoCaverna = false;
@@ -245,7 +254,7 @@ namespace MinecraftMapApp
                 {
                     controle.Visible = false;
                 }
-                lblInfoDimensao.Text = "🌍 DIMENSAO: SUPERFICIE";
+                lblInfoDimensao.Text = "SUPERFÍCIE";
                 lblInfoDimensao.ForeColor = Color.YellowGreen;
                 pontoSelecionadoParaDistancia = null;
                 joaoMariaAtivo = false;
@@ -338,7 +347,15 @@ namespace MinecraftMapApp
                         novoPonto
                     );
 
-                    // Salvar automaticamente
+                    // Foca automaticamente no ponto recem-criado,
+                    // pra ele nao ficar "escondido" fora da tela.
+                    CentralizarNoPonto(novoPonto);
+
+                    // Salva o ponto e a posicao da camera, pra
+                    // continuar assim mesmo se fechar o app.
+                    mundoAtual.CameraX = deslocamentoX;
+                    mundoAtual.CameraY = deslocamentoY;
+                    mundoAtual.CameraEscala = escala;
 
                     gerenciadorMundos
                         .SalvarMundoAtual();
@@ -618,7 +635,7 @@ namespace MinecraftMapApp
                 if (eSuperficie)
                 {
                     lblInfoDimensao.Text =
-                        "🌍 DIMENSAO: SUPERFICIE";
+                        "SUPERFÍCIE";
 
 
                     lblInfoDimensao.ForeColor =
@@ -627,7 +644,7 @@ namespace MinecraftMapApp
                 else if (eFim)
                 {
                     lblInfoDimensao.Text =
-                        "🌌 DIMENSAO: THE END";
+                        "THE END";
 
 
                     lblInfoDimensao.ForeColor =
@@ -636,7 +653,7 @@ namespace MinecraftMapApp
                 else
                 {
                     lblInfoDimensao.Text =
-                        "🔥 DIMENSAO: NETHER";
+                        "NETHER";
 
 
                     lblInfoDimensao.ForeColor =

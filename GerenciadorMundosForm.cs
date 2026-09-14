@@ -12,6 +12,7 @@ namespace MinecraftMapApp
         private Button btnAbrir = new Button();
         private Button btnExcluir = new Button();
         private Button btnCancelar = new Button();
+        private Button btnNovoMundo = new Button();
         private ContextMenuStrip menuContexto = new ContextMenuStrip();
         private ToolStripMenuItem itemEditar = new ToolStripMenuItem("Editar informações");
         private ToolStripMenuItem itemExcluir = new ToolStripMenuItem("Excluir mundo");
@@ -24,7 +25,7 @@ namespace MinecraftMapApp
             this.gerenciador = gerenciador;
 
             this.Text = "Meus Mundos";
-            this.Size = new Size(500, 450);
+            this.Size = new Size(500, 500);
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -71,7 +72,7 @@ namespace MinecraftMapApp
 
             btnAbrir.Text = "ABRIR";
             btnAbrir.Location =
-                new Point(25, 315);
+                new Point(25, 360);
             btnAbrir.Size =
                 new Size(135, 40);
 
@@ -89,7 +90,7 @@ namespace MinecraftMapApp
 
             btnExcluir.Text = "EXCLUIR";
             btnExcluir.Location =
-                new Point(180, 315);
+                new Point(180, 360);
             btnExcluir.Size =
                 new Size(135, 40);
 
@@ -107,15 +108,37 @@ namespace MinecraftMapApp
 
             btnCancelar.Text = "FECHAR";
             btnCancelar.Location =
-                new Point(335, 315);
+                new Point(335, 360);
             btnCancelar.Size =
                 new Size(120, 40);
 
             btnCancelar.Click +=
                 BtnCancelar_Click;
 
+            btnNovoMundo.Text = "+ NOVO MUNDO";
+            btnNovoMundo.Location =
+                new Point(25, 305);
+            btnNovoMundo.Size =
+                new Size(430, 40);
+
+            btnNovoMundo.BackColor =
+                Color.FromArgb(70, 100, 160);
+
+            btnNovoMundo.ForeColor =
+                Color.White;
+
+            btnNovoMundo.FlatStyle =
+                FlatStyle.Flat;
+
+            btnNovoMundo.Font =
+                new Font("Segoe UI", 9, FontStyle.Bold);
+
+            btnNovoMundo.Click +=
+                BtnNovoMundo_Click;
+
             this.Controls.Add(titulo);
             this.Controls.Add(listaMundos);
+            this.Controls.Add(btnNovoMundo);
             this.Controls.Add(btnAbrir);
             this.Controls.Add(btnExcluir);
             this.Controls.Add(btnCancelar);
@@ -183,6 +206,26 @@ namespace MinecraftMapApp
         private void ItemExcluir_Click(object? sender, EventArgs e)
         {
             BtnExcluir_Click(sender, e);
+        }
+
+        private void BtnNovoMundo_Click(
+            object? sender,
+            EventArgs e)
+        {
+            using NovoMundoForm janela = new NovoMundoForm();
+
+            if (janela.ShowDialog(this) == DialogResult.OK)
+            {
+                gerenciador.CriarMundo(
+                    janela.NomeMundo,
+                    janela.SeedMundo
+                );
+
+                AtualizarLista();
+
+                listaMundos.SelectedIndex =
+                    listaMundos.Items.Count - 1;
+            }
         }
 
         private void BtnAbrir_Click(
