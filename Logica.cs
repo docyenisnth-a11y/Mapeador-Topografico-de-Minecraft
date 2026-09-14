@@ -334,63 +334,10 @@ namespace MinecraftMapApp
 
 
             // ==========================================
-            // EIXOS
+            // GRADE DE CHUNKS (16x16 blocos)
             // ==========================================
 
-            using (
-                Pen penEixos =
-                new Pen(
-                    Color.FromArgb(
-                        80,
-                        255,
-                        255,
-                        255
-                    ),
-                    1))
-            {
-                g.DrawLine(
-                    penEixos,
-
-                    deslocamentoX,
-                    deslocamentoY,
-
-                    deslocamentoX +
-                    (
-                        2000 *
-                        cos30 *
-                        escala
-                    ),
-
-                    deslocamentoY +
-                    (
-                        2000 *
-                        sin30 *
-                        escala
-                    )
-                );
-
-
-                g.DrawLine(
-                    penEixos,
-
-                    deslocamentoX,
-                    deslocamentoY,
-
-                    deslocamentoX -
-                    (
-                        2000 *
-                        cos30 *
-                        escala
-                    ),
-
-                    deslocamentoY +
-                    (
-                        2000 *
-                        sin30 *
-                        escala
-                    )
-                );
-            }
+            DesenharGradeChunks(g, cos30, sin30);
 
 
             // ==========================================
@@ -880,6 +827,79 @@ namespace MinecraftMapApp
             return new PointF(
                 ((x - z) * cos30 * escala) + deslocamentoX,
                 (((x + z) * sin30) - y) * escala + deslocamentoY);
+        }
+
+        private (float x, float z) ConverterParaMundo(
+            float px,
+            float py,
+            float cos30,
+            float sin30)
+        {
+            float a = (px - deslocamentoX) / escala;
+            float b = (py - deslocamentoY) / escala;
+
+            float x = (a / cos30 + b / sin30) / 2f;
+            float z = (b / sin30 - a / cos30) / 2f;
+
+            return (x, z);
+        }
+
+        private void DesenharGradeChunks(
+            Graphics g,
+            float cos30,
+            float sin30)
+        {
+            int largura = this.ClientSize.Width;
+            int altura = this.ClientSize.Height;
+
+            var c1 = ConverterParaMundo(0, 0, cos30, sin30);
+            var c2 = ConverterParaMundo(largura, 0, cos30, sin30);
+            var c3 = ConverterParaMundo(0, altura, cos30, sin30);
+            var c4 = ConverterParaMundo(largura, altura, cos30, sin30);
+
+            float xMin = Math.Min(Math.Min(c1.x, c2.x), Math.Min(c3.x, c4.x));
+            float xMax = Math.Max(Math.Max(c1.x, c2.x), Math.Max(c3.x, c4.x));
+            float zMin = Math.Min(Math.Min(c1.z, c2.z), Math.Min(c3.z, c4.z));
+            float zMax = Math.Max(Math.Max(c1.z, c2.z), Math.Max(c3.z, c4.z));
+
+            int passo = 16;
+
+            // Se der zoom bem longe, dobra o espacamento pra nao
+            // desenhar milhares de linhas (grade de chunks vira
+            // grade de regioes maiores automaticamente).
+            while (
+                ((xMax - xMin) / passo > 250) ||
+                ((zMax - zMin) / passo > 250)
+            )
+            {
+                passo *= 2;
+            }
+
+            int xInicio = ((int)Math.Floor(xMin / 16)) * 16;
+            int xFim = ((int)Math.Ceiling(xMax / 16)) * 16;
+            int zInicio = ((int)Math.Floor(zMin / 16)) * 16;
+            int zFim = ((int)Math.Ceiling(zMax / 16)) * 16;
+
+            using (
+                Pen penGrade =
+                new Pen(
+                    Color.FromArgb(50, 255, 255, 255),
+                    1))
+            {
+                for (int x = xInicio; x <= xFim; x += passo)
+                {
+                    PointF a = ConverterParaTela(x, 0, zInicio, cos30, sin30);
+                    PointF b = ConverterParaTela(x, 0, zFim, cos30, sin30);
+                    g.DrawLine(penGrade, a, b);
+                }
+
+                for (int z = zInicio; z <= zFim; z += passo)
+                {
+                    PointF a = ConverterParaTela(xInicio, 0, z, cos30, sin30);
+                    PointF b = ConverterParaTela(xFim, 0, z, cos30, sin30);
+                    g.DrawLine(penGrade, a, b);
+                }
+            }
         }
 
         private void DesenharRotas(
