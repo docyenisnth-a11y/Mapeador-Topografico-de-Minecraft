@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -23,6 +24,12 @@ namespace MinecraftMapApp
 
         // Modo caverna (só na Superfície)
         private Button btnModo = new Button();
+
+        // Conversor de coordenadas (só no Nether)
+        private TextBox txtConvX = new TextBox();
+        private TextBox txtConvZ = new TextBox();
+        private Label lblConvResultado = new Label();
+        private List<Control> controlesConversor = new List<Control>();
 
         private void CriarMenuLateral()
         {
@@ -125,6 +132,71 @@ namespace MinecraftMapApp
             btnModo.Font = new Font("Segoe UI", 8, FontStyle.Bold);
             btnModo.Click += BtnModo_Click;
             panelMenu.Controls.Add(btnModo);
+
+
+            // Conversor: só aparece no Nether. Digita a coordenada
+            // onde você está agora e ele mostra a equivalente na
+            // Superfície (1 bloco no Nether = 8 na Superfície).
+            Label lblConvTitulo = new Label
+            {
+                Text = "Onde estou (Nether) → Superfície:",
+                ForeColor = Color.LightGray,
+                Location = new Point(20, 295),
+                Size = new Size(210, 18)
+            };
+            lblConvTitulo.Visible = false;
+            panelMenu.Controls.Add(lblConvTitulo);
+
+            Label lblConvX = new Label
+            {
+                Text = "X:",
+                ForeColor = Color.LightGray,
+                Location = new Point(20, 317),
+                Size = new Size(20, 20)
+            };
+            lblConvX.Visible = false;
+            panelMenu.Controls.Add(lblConvX);
+
+            txtConvX.Location = new Point(45, 315);
+            txtConvX.Size = new Size(80, 23);
+            txtConvX.Text = "0";
+            txtConvX.Visible = false;
+            txtConvX.TextChanged += TxtConversor_TextChanged;
+            panelMenu.Controls.Add(txtConvX);
+
+            Label lblConvZ = new Label
+            {
+                Text = "Z:",
+                ForeColor = Color.LightGray,
+                Location = new Point(135, 317),
+                Size = new Size(20, 20)
+            };
+            lblConvZ.Visible = false;
+            panelMenu.Controls.Add(lblConvZ);
+
+            txtConvZ.Location = new Point(160, 315);
+            txtConvZ.Size = new Size(70, 23);
+            txtConvZ.Text = "0";
+            txtConvZ.Visible = false;
+            txtConvZ.TextChanged += TxtConversor_TextChanged;
+            panelMenu.Controls.Add(txtConvZ);
+
+            lblConvResultado.Text = "Equivalente: X 0, Z 0";
+            lblConvResultado.ForeColor = Color.YellowGreen;
+            lblConvResultado.Location = new Point(20, 345);
+            lblConvResultado.Size = new Size(210, 20);
+            lblConvResultado.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            lblConvResultado.Visible = false;
+            panelMenu.Controls.Add(lblConvResultado);
+
+            // Guarda os labels do conversor pra alternar visibilidade
+            // junto com os campos, ao trocar de dimensão.
+            controlesConversor.Add(lblConvTitulo);
+            controlesConversor.Add(lblConvX);
+            controlesConversor.Add(txtConvX);
+            controlesConversor.Add(lblConvZ);
+            controlesConversor.Add(txtConvZ);
+            controlesConversor.Add(lblConvResultado);
         }
     }
 }

@@ -254,6 +254,28 @@ namespace MinecraftMapApp
         // ADICIONAR PONTO
         // ==========================================
 
+        private void TxtConversor_TextChanged(
+            object? sender,
+            EventArgs e)
+        {
+            if (
+                int.TryParse(txtConvX.Text, out int netherX) &&
+                int.TryParse(txtConvZ.Text, out int netherZ)
+            )
+            {
+                int superficieX = netherX * 8;
+                int superficieZ = netherZ * 8;
+
+                lblConvResultado.Text =
+                    $"Equivalente: X {superficieX}, Z {superficieZ}";
+            }
+            else
+            {
+                lblConvResultado.Text =
+                    "Digite numeros inteiros validos.";
+            }
+        }
+
         private void BtnModo_Click(
             object? sender,
             EventArgs e)
@@ -538,6 +560,11 @@ namespace MinecraftMapApp
                 }
 
                 btnModo.Visible = eSuperficie;
+
+                foreach (Control controle in controlesConversor)
+                {
+                    controle.Visible = !eSuperficie;
+                }
 
 
                 pontoSelecionadoParaDistancia =
