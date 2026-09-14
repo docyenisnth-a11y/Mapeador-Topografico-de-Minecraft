@@ -75,12 +75,21 @@ namespace MinecraftMapApp
             mundoAtual.PontosCaverna;
 
 
+        private List<PontoMinecraft> pontosFim =>
+            mundoAtual.PontosFim;
+
+
         // Lista de pontos correta pro estado atual (dimensao + modo).
-        // Superficie normal, Nether e Caverna sao independentes entre si.
+        // Superficie, Caverna, Nether e Fim sao independentes entre si.
         private List<PontoMinecraft> pontosAtuais
         {
             get
             {
+                if (eFim)
+                {
+                    return pontosFim;
+                }
+
                 if (!eSuperficie)
                 {
                     return pontosNether;
@@ -96,6 +105,7 @@ namespace MinecraftMapApp
         // ==========================================
 
         private bool eSuperficie = true;
+        private bool eFim = false;
         private bool modoCaverna = false;
 
 
@@ -227,6 +237,16 @@ namespace MinecraftMapApp
                 mundoAtual = janela.MundoSelecionado;
                 gerenciadorMundos.SelecionarMundo(mundoAtual);
                 eSuperficie = true;
+                eFim = false;
+                modoCaverna = false;
+                btnModo.BackColor = Color.FromArgb(90, 90, 90);
+                btnModo.Visible = true;
+                foreach (Control controle in controlesConversor)
+                {
+                    controle.Visible = false;
+                }
+                lblInfoDimensao.Text = "🌍 DIMENSAO: SUPERFICIE";
+                lblInfoDimensao.ForeColor = Color.YellowGreen;
                 pontoSelecionadoParaDistancia = null;
                 joaoMariaAtivo = false;
                 pontosRotaAtual.Clear();
@@ -369,6 +389,16 @@ namespace MinecraftMapApp
                         )
                     );
                 }
+            }
+            else if (eFim)
+            {
+                g.Clear(
+                    Color.FromArgb(
+                        30,
+                        20,
+                        45
+                    )
+                );
             }
             else
             {
@@ -549,8 +579,20 @@ namespace MinecraftMapApp
                     btnJoaoMaria.BackColor = Color.FromArgb(95, 70, 150);
                 }
 
-                eSuperficie =
-                    !eSuperficie;
+                if (eSuperficie)
+                {
+                    eSuperficie = false;
+                    eFim = false;
+                }
+                else if (!eFim)
+                {
+                    eFim = true;
+                }
+                else
+                {
+                    eSuperficie = true;
+                    eFim = false;
+                }
 
 
                 if (!eSuperficie)
@@ -563,7 +605,9 @@ namespace MinecraftMapApp
 
                 foreach (Control controle in controlesConversor)
                 {
-                    controle.Visible = !eSuperficie;
+                    // O conversor so faz sentido no Nether puro
+                    // (a conta X8 nao vale para o Fim).
+                    controle.Visible = !eSuperficie && !eFim;
                 }
 
 
@@ -579,6 +623,15 @@ namespace MinecraftMapApp
 
                     lblInfoDimensao.ForeColor =
                         Color.YellowGreen;
+                }
+                else if (eFim)
+                {
+                    lblInfoDimensao.Text =
+                        "🌌 DIMENSAO: THE END";
+
+
+                    lblInfoDimensao.ForeColor =
+                        Color.MediumPurple;
                 }
                 else
                 {
@@ -628,6 +681,18 @@ namespace MinecraftMapApp
             this.Invalidate();
         }
 
+        // Diz se uma rota salva pertence a dimensao que esta sendo
+        // vista agora (Superficie, Nether ou Fim sao independentes).
+        private bool RotaPertenceADimensaoAtual(RotaJoaoMaria rota)
+        {
+            if (eFim)
+            {
+                return rota.Fim;
+            }
+
+            return !rota.Fim && rota.Superficie == eSuperficie;
+        }
+
         private void FinalizarRotaJoaoMaria()
         {
             if (pontosRotaAtual.Count >= 2)
@@ -638,6 +703,7 @@ namespace MinecraftMapApp
                         Nome =
                             $"Rota João e Maria {mundoAtual.RotasJoaoMaria.Count + 1}",
                         Superficie = eSuperficie,
+                        Fim = eFim,
                         Pontos = new List<PontoRota>(pontosRotaAtual)
                     });
 
@@ -659,7 +725,7 @@ namespace MinecraftMapApp
 
             List<RotaJoaoMaria> rotas =
                 mundoAtual.RotasJoaoMaria
-                    .Where(r => r.Superficie == eSuperficie)
+                    .Where(RotaPertenceADimensaoAtual)
                     .ToList();
 
             if (rotas.Count == 0)
@@ -977,7 +1043,7 @@ namespace MinecraftMapApp
         {
             foreach (RotaJoaoMaria rota in mundoAtual.RotasJoaoMaria)
             {
-                if (rota.Superficie != eSuperficie ||
+                if (!RotaPertenceADimensaoAtual(rota) ||
                     rota.Pontos.Count < 2)
                     continue;
 

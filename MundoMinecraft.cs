@@ -15,6 +15,7 @@ namespace MinecraftMapApp
     {
         public string Nome { get; set; } = "Rota João e Maria";
         public bool Superficie { get; set; } = true;
+        public bool Fim { get; set; } = false;
         public List<PontoRota> Pontos { get; set; } = new List<PontoRota>();
     }
 
@@ -31,6 +32,8 @@ namespace MinecraftMapApp
         public List<PontoMinecraft> PontosNether { get; set; } = new List<PontoMinecraft>();
 
         public List<PontoMinecraft> PontosCaverna { get; set; } = new List<PontoMinecraft>();
+
+        public List<PontoMinecraft> PontosFim { get; set; } = new List<PontoMinecraft>();
 
         public List<RotaJoaoMaria> RotasJoaoMaria { get; set; } = new List<RotaJoaoMaria>();
     }
