@@ -30,6 +30,8 @@ namespace MinecraftMapApp
 
         public List<PontoMinecraft> PontosNether { get; set; } = new List<PontoMinecraft>();
 
+        public List<PontoMinecraft> PontosCaverna { get; set; } = new List<PontoMinecraft>();
+
         public List<RotaJoaoMaria> RotasJoaoMaria { get; set; } = new List<RotaJoaoMaria>();
     }
 }

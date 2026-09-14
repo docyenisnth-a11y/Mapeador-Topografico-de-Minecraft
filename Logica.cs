@@ -71,11 +71,32 @@ namespace MinecraftMapApp
             mundoAtual.PontosNether;
 
 
+        private List<PontoMinecraft> pontosCaverna =>
+            mundoAtual.PontosCaverna;
+
+
+        // Lista de pontos correta pro estado atual (dimensao + modo).
+        // Superficie normal, Nether e Caverna sao independentes entre si.
+        private List<PontoMinecraft> pontosAtuais
+        {
+            get
+            {
+                if (!eSuperficie)
+                {
+                    return pontosNether;
+                }
+
+                return modoCaverna ? pontosCaverna : pontosSuperficie;
+            }
+        }
+
+
         // ==========================================
         // ESTADO DO MAPA
         // ==========================================
 
         private bool eSuperficie = true;
+        private bool modoCaverna = false;
 
 
         private PontoMinecraft?
@@ -233,6 +254,20 @@ namespace MinecraftMapApp
         // ADICIONAR PONTO
         // ==========================================
 
+        private void BtnModo_Click(
+            object? sender,
+            EventArgs e)
+        {
+            modoCaverna = !modoCaverna;
+
+            btnModo.BackColor =
+                modoCaverna
+                ? Color.FromArgb(160, 160, 155)
+                : Color.FromArgb(90, 90, 90);
+
+            this.Invalidate();
+        }
+
         private void BtnAdicionar_Click(
             object? sender,
             EventArgs e)
@@ -257,18 +292,9 @@ namespace MinecraftMapApp
                             Nota = janela.NotaPonto
                         };
 
-                    if (eSuperficie)
-                    {
-                        pontosSuperficie.Add(
-                            novoPonto
-                        );
-                    }
-                    else
-                    {
-                        pontosNether.Add(
-                            novoPonto
-                        );
-                    }
+                    pontosAtuais.Add(
+                        novoPonto
+                    );
 
                     // Salvar automaticamente
 
@@ -301,13 +327,26 @@ namespace MinecraftMapApp
 
             if (eSuperficie)
             {
-                g.Clear(
-                    Color.FromArgb(
-                        34,
-                        139,
-                        34
-                    )
-                );
+                if (modoCaverna)
+                {
+                    g.Clear(
+                        Color.FromArgb(
+                            110,
+                            110,
+                            105
+                        )
+                    );
+                }
+                else
+                {
+                    g.Clear(
+                        Color.FromArgb(
+                            34,
+                            139,
+                            34
+                        )
+                    );
+                }
             }
             else
             {
@@ -349,11 +388,6 @@ namespace MinecraftMapApp
             // ==========================================
             // PONTOS
             // ==========================================
-
-            List<PontoMinecraft> pontosAtuais =
-                eSuperficie
-                ? pontosSuperficie
-                : pontosNether;
 
 
             foreach (var ponto in pontosAtuais)
@@ -495,6 +529,15 @@ namespace MinecraftMapApp
 
                 eSuperficie =
                     !eSuperficie;
+
+
+                if (!eSuperficie)
+                {
+                    modoCaverna = false;
+                    btnModo.BackColor = Color.FromArgb(90, 90, 90);
+                }
+
+                btnModo.Visible = eSuperficie;
 
 
                 pontoSelecionadoParaDistancia =
@@ -726,9 +769,7 @@ namespace MinecraftMapApp
             }
 
             List<PontoMinecraft> pontos =
-                eSuperficie
-                ? pontosSuperficie
-                : pontosNether;
+                pontosAtuais;
 
             foreach (PontoMinecraft ponto in pontos)
             {
@@ -1140,12 +1181,6 @@ namespace MinecraftMapApp
             }
 
 
-            List<PontoMinecraft> pontosAtuais =
-                eSuperficie
-                ? pontosSuperficie
-                : pontosNether;
-
-
             foreach (var ponto in pontosAtuais)
             {
                 if (
@@ -1296,13 +1331,6 @@ namespace MinecraftMapApp
                         janela.PontoExcluido
                     )
                     {
-                        List<PontoMinecraft>
-                            pontosAtuais =
-                            eSuperficie
-                            ? pontosSuperficie
-                            : pontosNether;
-
-
                         pontosAtuais.Remove(
                             ponto
                         );

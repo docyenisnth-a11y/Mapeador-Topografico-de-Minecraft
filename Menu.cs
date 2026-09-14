@@ -21,6 +21,9 @@ namespace MinecraftMapApp
         private Button btnJoaoMaria = new Button();
         private Label lblRota = new Label();
 
+        // Modo caverna (só na Superfície)
+        private Button btnModo = new Button();
+
         private void CriarMenuLateral()
         {
             Panel panelMenu = new Panel
@@ -110,6 +113,18 @@ namespace MinecraftMapApp
             lblRota.Size = new Size(210, 38);
             lblRota.Font = new Font("Segoe UI", 8, FontStyle.Bold);
             panelMenu.Controls.Add(lblRota);
+
+
+            // Modo caverna: só aparece na Superfície.
+            btnModo.Text = "MODO CAVERNA";
+            btnModo.Location = new Point(20, 295);
+            btnModo.Size = new Size(210, 40);
+            btnModo.BackColor = Color.FromArgb(90, 90, 90);
+            btnModo.ForeColor = Color.White;
+            btnModo.FlatStyle = FlatStyle.Flat;
+            btnModo.Font = new Font("Segoe UI", 8, FontStyle.Bold);
+            btnModo.Click += BtnModo_Click;
+            panelMenu.Controls.Add(btnModo);
         }
     }
 }
