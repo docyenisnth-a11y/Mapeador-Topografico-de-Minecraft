@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MinecraftApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+319d3e8c6d795bc257b5211bf8bf525cdb2d451e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+890c2778ff8af8ebbd986231f285be04ca6102e9")]
 [assembly: System.Reflection.AssemblyProductAttribute("MinecraftApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MinecraftApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
